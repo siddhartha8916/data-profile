@@ -1,0 +1,1057 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "MIS Data Profile Service",
+    "description": "MIS Data Profile Service for Data Analytics",
+    "version": "0.0.1"
+  },
+  "externalDocs": {
+    "description": "Download JSON file",
+    "url": "/api-swagger-json"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8000",
+      "description": "Development server"
+    }
+  ],
+  "paths": {
+    "/api/v1/data-profile": {
+      "get": {
+        "tags": ["Data Profile"],
+        "summary": "Get All Data Profiles",
+        "description": "Get All Data Profiles",
+        "parameters": [
+          {
+            "name": "search_term",
+            "in": "query",
+            "description": "Filter Data Profile",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page Number",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Results Per Page",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "sort_by",
+            "in": "query",
+            "description": "Sorting on Columns",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/AllDataProfiles"
+                      }
+                    },
+                    "pagination": {
+                      "$ref": "#/components/schemas/Pagination"
+                    }
+                  }
+                },
+                "example": {
+                  "data": [
+                    {
+                      "profile_id": 1,
+                      "profile_name": "ProfileOne",
+                      "table_name": "TableOne",
+                      "created_by": "JohnDoe",
+                      "last_sync_time": "2023-12-01T08:00:00Z",
+                      "updated_by": "JaneDoe",
+                      "created_at": "2023-12-01T08:00:00Z",
+                      "updated_at": "2023-12-01T08:00:00Z",
+                      "is_active": true,
+                      "version": 0
+                    },
+                    {
+                      "profile_id": 2,
+                      "profile_name": "ProfileTwo",
+                      "table_name": "TableTwo",
+                      "created_by": "Alice",
+                      "last_sync_time": "2023-12-02T08:00:00Z",
+                      "updated_by": "Bob",
+                      "created_at": "2023-12-02T08:00:00Z",
+                      "updated_at": "2023-12-02T08:00:00Z",
+                      "is_active": false,
+                      "version": 0
+                    }
+                  ],
+                  "pagination": {
+                    "itemCount": 12,
+                    "offset": 0,
+                    "perPage": 2,
+                    "page": 1,
+                    "next": null,
+                    "prev": null,
+                    "hasNextPage": false,
+                    "hasPrevPage": false,
+                    "pageCount": 1
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "errors": [
+                    {
+                      "message": "Unknown field assigned_to",
+                      "code": "unknown-field-assigned_to"
+                    },
+                    {
+                      "message": "Unknown field created_at",
+                      "code": "unknown-field-created_at"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "errors": [
+                    {
+                      "message": "Something Bad Occured",
+                      "code": "app-err-01"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Data Profile"],
+        "summary": "Create a profile",
+        "description": "Endpoint to create a new profile",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateDataProfileSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "profile_id": {
+                            "type": "number",
+                            "example": 10
+                          },
+                          "profile_name": {
+                            "type": "string",
+                            "example": "ProfileOne"
+                          },
+                          "table_name": {
+                            "type": "string",
+                            "example": "TableOne"
+                          },
+                          "created_by": {
+                            "type": "string",
+                            "example": "selenaGomez"
+                          },
+                          "updated_by": {
+                            "type": "string",
+                            "example": "selenaGomez"
+                          },
+                          "last_sync_time": {
+                            "type": "string",
+                            "format": "date-time",
+                            "example": "2023-12-17T14:00:48.566Z"
+                          },
+                          "created_at": {
+                            "type": "string",
+                            "format": "date-time",
+                            "example": "2023-12-17T14:00:48.566Z"
+                          },
+                          "updated_at": {
+                            "type": "string",
+                            "format": "date-time",
+                            "example": "2023-12-17T14:00:48.566Z"
+                          },
+                          "version": {
+                            "type": "integer",
+                            "example": 10
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "data": [
+                    {
+                      "profile_id": 10,
+                      "profile_name": "ProfileOne",
+                      "table_name": "TableOne",
+                      "created_by": "selenaGomez",
+                      "updated_by": "selenaGomez",
+                      "last_sync_time": "2023-12-17T14:00:48.566Z",
+                      "created_at": "2023-12-17T14:00:48.566Z",
+                      "updated_at": "2023-12-17T14:00:48.566Z",
+                      "version": 0
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Data Profile"],
+        "summary": "Update a Data Profile",
+        "description": "Endpoint to update a Data Profile",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateDataProfileSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "profile_id": {
+                            "type": "number",
+                            "example": 10
+                          },
+                          "profile_name": {
+                            "type": "string",
+                            "example": "ProfileOne"
+                          },
+                          "table_name": {
+                            "type": "string",
+                            "example": "TableOne"
+                          },
+                          "created_by": {
+                            "type": "string",
+                            "example": "selenaGomez"
+                          },
+                          "updated_by": {
+                            "type": "string",
+                            "example": "selenaGomez"
+                          },
+                          "last_sync_time": {
+                            "type": "string",
+                            "format": "date-time",
+                            "example": "2023-12-17T14:00:48.566Z"
+                          },
+                          "created_at": {
+                            "type": "string",
+                            "format": "date-time",
+                            "example": "2023-12-17T14:00:48.566Z"
+                          },
+                          "updated_at": {
+                            "type": "string",
+                            "format": "date-time",
+                            "example": "2023-12-17T14:00:48.566Z"
+                          },
+                          "version": {
+                            "type": "integer",
+                            "example": 10
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "data": [
+                    {
+                      "profile_id": 10,
+                      "profile_name": "ProfileOne",
+                      "table_name": "TableOne",
+                      "created_by": "selenaGomez",
+                      "updated_by": "selenaGomez",
+                      "last_sync_time": "2023-12-17T14:00:48.566Z",
+                      "created_at": "2023-12-17T14:00:48.566Z",
+                      "updated_at": "2023-12-17T14:00:48.566Z",
+                      "version": 1
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/data-profile/{profile_id}": {
+      "get": {
+        "tags": ["Data Profile"],
+        "summary": "Retrieve a data profile using its ID",
+        "description": "Retrieve a data profile using its ID",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "profile_id",
+            "required": true,
+            "description": "ID of the data profile",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/DataProfileDetails"
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "data": [
+                    {
+                      "profile_id": 1,
+                      "profile_name": "ProfileOne",
+                      "table_name": "TableOne",
+                      "created_by": "JohnDoe",
+                      "last_sync_time": "2023-12-01T08:00:00Z",
+                      "updated_by": "JaneDoe",
+                      "created_at": "2023-12-01T08:00:00Z",
+                      "updated_at": "2023-12-01T08:00:00Z",
+                      "profile_def": {
+                        "schema": "public",
+                        "columnDef": {
+                          "indexColumns": [
+                            {
+                              "notNull": true,
+                              "dataType": "VARCHAR",
+                              "isPrimary": true,
+                              "columnName": "firstName",
+                              "references": null,
+                              "defaultValue": null,
+                              "maxAllowedChars": 10
+                            }
+                          ],
+                          "regularColumns": [
+                            {
+                              "notNull": true,
+                              "dataType": "VARCHAR",
+                              "isUnique": false,
+                              "columnName": "lastName",
+                              "references": null,
+                              "defaultValue": null,
+                              "maxAllowedChars": null
+                            }
+                          ],
+                          "derivedColumns": [
+                            {
+                              "notNull": true,
+                              "dataType": "VARCHAR",
+                              "columnName": "fullName",
+                              "maxAllowedChars": 45,
+                              "operation": "CONCATENATE",
+                              "onValue": null,
+                              "onColumns": ["firstName", "lastName"]
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Data profile not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "errors": [
+                    {
+                      "message": "Profile Details Not Found",
+                      "code": "profile-srv-err-01"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "errors": [
+                    {
+                      "message": "Something Bad Occured",
+                      "code": "app-err-01"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Data Profile"],
+        "summary": "Delete a specific Data Profile by ID",
+        "description": "Deletes a Data Profile by its unique ID.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "profile_id",
+            "required": true,
+            "description": "ID of the Data Profile to delete",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Data Profile successfully deleted"
+          },
+          "404": {
+            "description": "Data profile not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "errors": [
+                    {
+                      "message": "Profile Details Not Found",
+                      "code": "profile-srv-err-01"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "errors": [
+                    {
+                      "message": "Something Bad Occured",
+                      "code": "app-err-01"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/data-profile/update/last-sync-time": {
+      "put": {
+        "tags": ["Data Profile"],
+        "description": "Update last sync time for a data profile",
+        "summary": "Update last sync time for a data profile",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "profile_id": {
+                    "type": "integer",
+                    "example": 1
+                  },
+                  "last_sync_time": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2023-10-05T14:48:00.000Z"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Update",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "profile_id": {
+                            "type": "integer",
+                            "example": 1
+                          },
+                          "profile_name": {
+                            "type": "string",
+                            "example": "dcfb"
+                          },
+                          "table_name": {
+                            "type": "string",
+                            "example": "xcb"
+                          },
+                          "created_by": {
+                            "type": "string",
+                            "example": "emmaWatson"
+                          },
+                          "updated_by": {
+                            "type": "string",
+                            "example": "emmaWatson"
+                          },
+                          "last_sync_time": {
+                            "type": "string",
+                            "format": "date-time",
+                            "example": "5000-10-05T14:48:00.000Z"
+                          },
+                          "created_at": {
+                            "type": "string",
+                            "format": "date-time",
+                            "example": "2023-12-20T06:05:46.956Z"
+                          },
+                          "updated_at": {
+                            "type": "string",
+                            "format": "date-time",
+                            "example": "2023-12-20T06:05:46.956Z"
+                          },
+                          "version": {
+                            "type": "integer",
+                            "example": 2
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Data profile not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "errors": [
+                    {
+                      "message": "Profile Details Not Found",
+                      "code": "profile-srv-err-01"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Something Went Wrong Error response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "errors": [
+                    {
+                      "message": "Something Bad Occured",
+                      "code": "app-err-01"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AllDataProfiles": {
+        "type": "object",
+        "properties": {
+          "profile_id": {
+            "type": "number"
+          },
+          "profile_name": {
+            "type": "string"
+          },
+          "table_name": {
+            "type": "string"
+          },
+          "created_by": {
+            "type": "string"
+          },
+          "last_sync_time": {
+            "type": "string"
+          },
+          "updated_by": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "updated_at": {
+            "type": "string"
+          },
+          "version": {
+            "type": "number"
+          },
+          "is_active": {
+            "type": "boolean"
+          }
+        }
+      },
+      "DataProfileDetails": {
+        "type": "object",
+        "properties": {
+          "profile_id": {
+            "type": "number"
+          },
+          "profile_name": {
+            "type": "string"
+          },
+          "table_name": {
+            "type": "string"
+          },
+          "created_by": {
+            "type": "string"
+          },
+          "last_sync_time": {
+            "type": "string"
+          },
+          "updated_by": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "updated_at": {
+            "type": "string"
+          },
+          "version": {
+            "type": "number"
+          },
+          "is_active": {
+            "type": "boolean"
+          },
+          "profile_def": {
+            "$ref": "#/components/schemas/ProfileDefinition"
+          }
+        }
+      },
+      "CreateDataProfileSchema": {
+        "type": "object",
+        "properties": {
+          "profile_name": {
+            "type": "string"
+          },
+          "table_name": {
+            "type": "string"
+          },
+          "schema": {
+            "type": "string"
+          },
+          "target_connection_id": {
+            "type": "number"
+          },
+          "profile_def": {
+            "$ref": "#/components/schemas/ProfileDefinition"
+          }
+        },
+        "required": ["profile_name", "table_name", "profile_def", "schema"]
+      },
+      "UpdateDataProfileSchema": {
+        "type": "object",
+        "properties": {
+          "profile_id": {
+            "type": "number",
+            "description": "ID of the data profile",
+            "example": 1
+          },
+          "profile_name": {
+            "type": "string",
+            "description": "Name of the data profile",
+            "example": "MyUpdatedProfile"
+          },
+          "profile_def": {
+            "$ref": "#/components/schemas/ProfileDefinition"
+          },
+          "version": {
+            "type": "integer",
+            "description": "Version number of the data profile",
+            "example": 2
+          }
+        },
+        "required": ["profile_id", "profile_name", "profile_def", "version"],
+        "description": "Schema for updating a data profile including versioning"
+      },
+      "ProfileDefinition": {
+        "type": "object",
+        "properties": {
+          "schema": {
+            "type": "string"
+          },
+          "columnDef": {
+            "type": "object",
+            "properties": {
+              "indexColumns": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "notNull": {
+                      "type": "boolean"
+                    },
+                    "dataType": {
+                      "type": "string"
+                    },
+                    "isPrimary": {
+                      "type": "boolean"
+                    },
+                    "columnName": {
+                      "type": "string"
+                    },
+                    "references": {
+                      "type": "object",
+                      "nullable": true,
+                      "properties": {
+                        "tableName": { "type": "string" },
+                        "columnName": { "type": "string" }
+                      }
+                    },
+                    "defaultValue": {
+                      "oneOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "number"
+                        }
+                      ],
+                      "nullable": true
+                    },
+                    "maxAllowedChars": {
+                      "type": "number",
+                      "nullable": true
+                    }
+                  },
+                  "required": ["notNull", "dataType", "isPrimary", "columnName"]
+                }
+              },
+              "regularColumns": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "notNull": {
+                      "type": "boolean"
+                    },
+                    "dataType": {
+                      "type": "string"
+                    },
+                    "isUnique": {
+                      "type": "boolean"
+                    },
+                    "columnName": {
+                      "type": "string"
+                    },
+                    "references": {
+                      "type": "object",
+                      "nullable": true,
+                      "properties": {
+                        "tableName": { "type": "string" },
+                        "columnName": { "type": "string" }
+                      }
+                    },
+                    "defaultValue": {
+                      "oneOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "number"
+                        }
+                      ],
+                      "nullable": true
+                    },
+                    "maxAllowedChars": {
+                      "type": "number",
+                      "nullable": true
+                    }
+                  },
+                  "required": ["notNull", "dataType", "isUnique", "columnName"]
+                }
+              },
+              "derivedColumns": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "notNull": {
+                      "type": "boolean"
+                    },
+                    "dataType": {
+                      "type": "string"
+                    },
+                    "columnName": {
+                      "type": "string"
+                    },
+                    "maxAllowedChars": {
+                      "type": "number",
+                      "nullable": true
+                    },
+                    "operation": {
+                      "type": "string"
+                    },
+                    "onValue": {
+                      "oneOf": [
+                        {
+                          "type": "string",
+                          "nullable": true
+                        },
+                        {
+                          "type": "number",
+                          "nullable": true
+                        }
+                      ]
+                    },
+                    "onColumns": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "maxItems": 4
+                    }
+                  },
+                  "required": ["notNull", "dataType", "columnName"]
+                }
+              }
+            },
+            "required": ["indexColumns", "derivedColumns", "regularColumns"]
+          }
+        },
+        "required": ["schema", "columnDef"]
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Error Message only for API Use"
+          },
+          "code": {
+            "type": "string",
+            "description": "Error Code Mapped in front-end for different locales"
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "Pagination": {
+        "type": "object",
+        "properties": {
+          "itemCount": {
+            "type": "integer",
+            "description": "Total number of items available."
+          },
+          "offset": {
+            "type": "integer",
+            "description": "Offset for the current page."
+          },
+          "perPage": {
+            "type": "integer",
+            "description": "Number of items per page."
+          },
+          "page": {
+            "type": "integer",
+            "description": "Current page number."
+          },
+          "next": {
+            "type": "integer",
+            "nullable": true,
+            "description": "Next page number, or null if there is no next page."
+          },
+          "prev": {
+            "type": "integer",
+            "nullable": true,
+            "description": "Previous page number, or null if there is no previous page."
+          },
+          "hasNextPage": {
+            "type": "boolean",
+            "description": "Indicates if there is a next page."
+          },
+          "hasPrevPage": {
+            "type": "boolean",
+            "description": "Indicates if there is a previous page."
+          },
+          "pageCount": {
+            "type": "integer",
+            "description": "Total number of pages available."
+          }
+        },
+        "required": [
+          "itemCount",
+          "offset",
+          "perPage",
+          "page",
+          "next",
+          "prev",
+          "hasNextPage",
+          "hasPrevPage",
+          "pageCount"
+        ]
+      }
+    }
+  }
+}
