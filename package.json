@@ -9,6 +9,7 @@
     "start": "node -r ts-node/register/transpile-only -r tsconfig-paths/register dist/src/server.js",
     "dev": "nodemon -r tsconfig-paths/register src/server.ts",
     "fl": "eslint src/**/*.ts --fix && eslint src/**/*.ts",
+    "fl-jest": "eslint jest.config.js --fix && eslint jest.config.js",
     "test": "jest --watchAll --no-cache --detectOpenHandles"
   },
   "author": "siddhartha",
