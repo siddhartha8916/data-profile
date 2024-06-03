@@ -1,10 +1,9 @@
-import { NextFunction, Request, Response } from 'express'
+import { Request, Response } from 'express'
 import { CustomError } from '../errors/abstract-custom-error'
 import logger from '../utils/logger'
 import { DatabaseCustomError } from '../errors/abstract-database-error'
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {
+export const errorHandler = (err: Error, req: Request, res: Response) => {
   if (process.env.NODE_ENV !== 'test') {
     logger.error(`${req.ip} - ${req.url} - ${JSON.stringify(err)}`)
   }
@@ -14,8 +13,9 @@ export const errorHandler = (err: Error, req: Request, res: Response, next: Next
   }
 
   if (err instanceof DatabaseCustomError) {
+    const errorDetails = err.getErrorDetails()
     return res.status(503).json({
-      errors: [{ message: err.err.routine || 'Database Error !!!', code: err.message || 'db-err-02' }]
+      errors: [{ message: errorDetails.routine || 'Database Error !!!', code: err.message || 'db-err-02' }]
     })
   }
 

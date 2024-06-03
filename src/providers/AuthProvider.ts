@@ -6,7 +6,7 @@ import { AccessTokenResponse } from '../types/auth'
 import { BadRequestError } from '../errors/bad-request-error'
 
 class AuthService {
-  private keycloak!: KeycloakType
+  private readonly keycloak!: KeycloakType
 
   constructor() {
     this.keycloak = new Keycloak(
@@ -47,7 +47,7 @@ class AuthService {
       )
 
       if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`)
+        throw new BadRequestError([{ message: `HTTP error! Status: ${response.status}`, code: 'http-error' }])
       }
 
       return await response.json()

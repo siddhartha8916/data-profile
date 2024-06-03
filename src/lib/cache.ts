@@ -15,9 +15,9 @@ interface CacheItemOptions {
 class Cache {
   private items: { [key: string]: CacheItem } = {}
   private count: number = 0
-  private maxSize: number
+  private readonly maxSize: number
   private fillFactor: number = 0.75
-  private purgeSize: number
+  private readonly purgeSize: number
 
   constructor(maxSize?: number) {
     this.maxSize = maxSize ?? -1

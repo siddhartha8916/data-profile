@@ -6,7 +6,7 @@ import { Context } from 'joi'
 export abstract class CustomError extends Error {
   abstract statusCode: number
 
-  constructor(message: string) {
+  protected constructor(message: string) {
     // same as throw new Error('Something Bad Occured')
     super(message)
 

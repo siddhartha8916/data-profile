@@ -5,13 +5,18 @@ import { DatabaseError } from 'pg'
 
 export abstract class DatabaseCustomError extends Error {
   abstract statusCode: number
-  abstract err: DatabaseError
 
-  constructor(err: DatabaseError) {
-    // same as throw new Error('Something Bad Occured')
-    super(err.code)
+  protected constructor(protected err: DatabaseError) {
+    // Calls the parent class (Error) constructor with the error message
+    super(err.message)
 
+    // Set the prototype explicitly.
     Object.setPrototypeOf(this, DatabaseCustomError.prototype)
+  }
+
+  // Public method to get error details
+  getErrorDetails() {
+    return this.err
   }
 
   abstract serializeErrors(): { message: string; code: string }[]
