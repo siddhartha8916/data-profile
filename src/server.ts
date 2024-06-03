@@ -27,7 +27,10 @@ async function startServer() {
   })
 }
 
-startServer()
+startServer().catch((err) => {
+  console.error('Failed to start server:', err)
+  process.exit(1)
+})
 
 process.on('unhandledRejection', (err: Error) => {
   console.log('error :>> ', err)
