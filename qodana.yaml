@@ -1,3 +1,7 @@
 bootstrap: npm install
 include:
     - name: Eslint
+exclude:
+  - name: All
+    paths:
+      - src/routes/__test__
